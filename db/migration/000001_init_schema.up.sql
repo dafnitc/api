@@ -1,24 +1,28 @@
-Table socials {
-  id varchar [pk]
-  name varchar
-  logo_url varchar
-}
+CREATE TABLE IF NOT EXISTS "socials" (
+  "id" text PRIMARY KEY,
+  "name" text,
+  "logo_url" text
+);
 
-Table projects as P {
-  id varchar [pk]
-  entityId varchar
-  title varchar
-  description varchar
-  amount bigint
-  amount_raised bigint
-  created_at timestampz [default: `now()`]
-  updated_at timestamp
-}
+CREATE TABLE IF NOT EXISTS "projects" (
+  "id" text PRIMARY KEY,
+  "entity_id" text,
+  "title" text,
+  "description" text,
+  "amount" bigint,
+  "amount_raised" bigint,
+  "created_at" timestamptz DEFAULT (now()),
+  "updated_at" timestamptz
+);
 
-Table project_socials {
-  id varchar [pk]
-  project_id varchar [ref: > P.id]
-  social_id varchar [ref: > socials.id]
-  created_at timestampz [default: `now()`]
-  updated_at timestamp
-}
+CREATE TABLE IF NOT EXISTS "project_socials" (
+  "id" text PRIMARY KEY,
+  "project_id" text,
+  "social_id" text,
+  "created_at" timestamptz DEFAULT (now()),
+  "updated_at" timestamptz
+);
+
+ALTER TABLE "project_socials" ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("id");
+
+ALTER TABLE "project_socials" ADD FOREIGN KEY ("social_id") REFERENCES "socials" ("id");
